@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Kechirasizmi?</title>
+<style>
+  :root{
+    --plum-deep: #2b0f2e;
+    --plum: #4a1942;
+    --rose: #ff5d7a;
+    --rose-soft: #ff8fa3;
+    --gold: #ffcf7a;
+    --cream: #fff3ec;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin:0;
+    padding:0;
+    height:100%;
+    overflow-x:hidden;
+  }
+
+  body{
+    min-height:100vh;
+    min-height:100svh;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at 20% 10%, #6a2456 0%, transparent 55%),
+                radial-gradient(circle at 85% 85%, #7a1f4a 0%, transparent 50%),
+                linear-gradient(160deg, var(--plum-deep), var(--plum) 55%, #5c1b3e 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:24px 16px;
+  }
+
+  /* floating hearts background */
+  .heart-field{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:0;
+  }
+  .heart-field span{
+    position:absolute;
+    bottom:-10%;
+    font-size:22px;
+    opacity:0.35;
+    animation: floatUp linear infinite;
+    filter: drop-shadow(0 0 6px rgba(255,93,122,0.4));
+  }
+  @keyframes floatUp{
+    0%{ transform: translateY(0) rotate(0deg); opacity:0; }
+    10%{ opacity:0.4; }
+    90%{ opacity:0.3; }
+    100%{ transform: translateY(-120vh) rotate(25deg); opacity:0; }
+  }
+
+  .card{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:420px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(14px);
+    border-radius: 28px;
+    padding: 38px 26px 32px;
+    text-align:center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
+    animation: riseIn 0.9s cubic-bezier(.2,.9,.25,1) both;
+  }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform: translateY(28px) scale(0.96); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  .top-icon{
+    font-size:42px;
+    display:inline-block;
+    margin-bottom:14px;
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ transform: scale(1); }
+    50%{ transform: scale(1.12); }
+  }
+
+  .message{
+    color: var(--cream);
+    font-size: 17px;
+    line-height: 1.65;
+    font-weight: 500;
+    margin: 0 0 26px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  }
+
+  .divider{
+    width:56px;
+    height:3px;
+    margin: 0 auto 24px;
+    border-radius:3px;
+    background: linear-gradient(90deg, var(--gold), var(--rose));
+    opacity:0.8;
+  }
+
+  .question{
+    color: var(--gold);
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 30px;
+    letter-spacing: 0.2px;
+  }
+
+  .btn-zone{
+    position:relative;
+    height: 130px;
+  }
+
+  button{
+    border:none;
+    outline:none;
+    cursor:pointer;
+    font-family:inherit;
+    font-weight:700;
+    font-size:16px;
+    border-radius: 999px;
+    padding: 14px 0;
+    width: 130px;
+    text-align:center;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s ease;
+  }
+
+  .yes-btn{
+    background: linear-gradient(135deg, var(--rose), #ff3d68);
+    color:#fff3ec;
+    box-shadow: 0 10px 24px rgba(255,61,104,0.45);
+    position:absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index:2;
+  }
+  .yes-btn:active{ transform: translateY(-50%) scale(0.95); }
+  .no-btn{
+    background: rgba(255,255,255,0.12);
+    color: var(--cream);
+    border: 1px solid rgba(255,255,255,0.35);
+    position:absolute;
+    z-index:3;
+    transition: top 0.28s ease, left 0.28s ease, transform 0.15s ease;
+  }
+
+  .result{
+    margin-top: 22px;
+    font-size: 21px;
+    font-weight: 800;
+    color: var(--gold);
+    min-height: 30px;
+    text-shadow: 0 2px 12px rgba(255,143,163,0.5);
+    animation: pop 0.5s cubic-bezier(.2,.9,.25,1) both;
+  }
+  @keyframes pop{
+    0%{ transform: scale(0.6); opacity:0; }
+    70%{ transform: scale(1.08); opacity:1; }
+    100%{ transform: scale(1); }
+  }
+
+  .hidden{ display:none; }
+
+  @media (max-width: 360px){
+    .message{ font-size:15.5px; }
+    .question{ font-size:18px; }
+    button{ font-size:14.5px; padding:12px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="heart-field" id="heartField"></div>
+
+<div class="card">
+  <div class="top-icon">💔</div>
+  <p class="message">
+    Menga ohirgi imkon berishizni sorayman, men esa boshqa hech qachon jahl qilmaslikka vada beraman, ilojim boricha jahlimi bosaman.
+  </p>
+  <div class="divider"></div>
+  <p class="question">Imkon berasizmi Xotin aka? 🥺</p>
+
+  <div class="btn-zone" id="btnZone">
+    <button class="no-btn" id="noBtn">Yo'q ❌</button>
+    <button class="yes-btn" id="yesBtn">Ha ✅</button>
+  </div>
+
+  <div class="result hidden" id="result"></div>
+</div>
+
+<script>
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const btnZone = document.getElementById('btnZone');
+  const resultEl = document.getElementById('result');
+
+  function moveNoButton(){
+    const zoneRect = btnZone.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    const maxLeft = zoneRect.width - btnRect.width - 8;
+    const maxTop = zoneRect.height - btnRect.height - 8;
+
+    const newLeft = Math.max(8, Math.random() * maxLeft);
+    const newTop = Math.max(8, Math.random() * maxTop);
+
+    noBtn.style.left = newLeft + 'px';
+    noBtn.style.top = newTop + 'px';
+  }
+
+  // place it in a starting spot once layout is ready (left side)
+  function setInitialNoPosition(){
+    noBtn.style.left = '8px';
+    noBtn.style.top = ((btnZone.clientHeight - noBtn.offsetHeight) / 2) + 'px';
+  }
+  window.addEventListener('load', setInitialNoPosition);
+
+  noBtn.addEventListener('mouseenter', moveNoButton);
+  noBtn.addEventListener('touchstart', function(e){
+    e.preventDefault();
+    moveNoButton();
+  }, {passive:false});
+  noBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    moveNoButton();
+  });
+
+  yesBtn.addEventListener('click', () => {
+    resultEl.textContent = "Rahmat jonidan 😁❤️‍🔥";
+    resultEl.classList.remove('hidden');
+    noBtn.style.display = 'none';
+    yesBtn.style.transform = 'scale(0.95)';
+  });
+
+  // floating hearts background
+  const heartField = document.getElementById('heartField');
+  const heartEmojis = ['❤️','💕','💗','🩷','💖'];
+  const totalHearts = 18;
+
+  for(let i=0; i<totalHearts; i++){
+    const span = document.createElement('span');
+    span.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+    span.style.left = Math.random()*100 + '%';
+    span.style.fontSize = (14 + Math.random()*18) + 'px';
+    const duration = 8 + Math.random()*10;
+    span.style.animationDuration = duration + 's';
+    span.style.animationDelay = (Math.random()*duration) + 's';
+    heartField.appendChild(span);
+  }
+</script>
+
+</body>
+</html>
